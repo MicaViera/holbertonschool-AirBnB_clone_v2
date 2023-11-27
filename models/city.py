@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Foreignkey
 from sqlalchemy.orm import relationship
+from os import getenv
 
 
 class City(BaseModel):
@@ -19,3 +20,7 @@ class City(BaseModel):
         nullable=False,
         ForeignKey('states.id'),
     )
+    
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        places = relationship('Place', backref="cities",
+                              cascade="all, delete, delete-orphan")
