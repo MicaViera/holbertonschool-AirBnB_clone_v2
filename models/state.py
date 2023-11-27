@@ -4,6 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from os import getenv
+from models import storage
 
 
 class State(BaseModel):
@@ -18,3 +19,13 @@ class State(BaseModel):
         cities = relationship('City', 
             backref="state",
             cascade="all, delete, delete-orphan")
+
+    @property
+    def cities(self):
+        """Method that returns the list of City instances."""
+        city_list = []
+        for key, value in storage._FileStorage__objects.items():
+            key = key.split(".")
+            if key == 'City' and value.state_id == self.id:
+                city_list.append(value)
+        return city_list
