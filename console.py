@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import os
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is '}'\
+                    if pline[0] == '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,33 +116,34 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        args = args.split()
         if not args:
             print("** class name missing **")
             return
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
         new_instance = HBNBCommand.classes[args[0]]()
+        args = args.split()
         for arg in args[1:]:
             key, value = arg.split("=")[0], arg.split("=")[1]
-            if hasattr(new_instance, key):
-                if '"' in arg:
-                    value = str(value)
+            if hasattr(new_instance, key) is True:
+                if '"' in value:
                     value = value.strip("\"")
-                    value = value.replace("_", " ")
-                elif "." in arg:
-                    value = float(value)
+                    value = str(value)
+                    if "_" in value:
+                        value = value.replace("_", " ")
                 else:
-                    value = int(value)
+                    if "." in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
                 setattr(new_instance, key, value)
             else:
                 pass
 
-        storage.new(new_instance)
-        print(new_instance.id)
+        new_instance.save()
         storage.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
