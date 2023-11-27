@@ -63,3 +63,5 @@ class FileStorage:
             key = f"{obj.__class__.__name__}.{obj.id}"
             if key in self.all().keys():
                 del self.all()[key]
+        else:
+            pass
