@@ -65,3 +65,7 @@ class FileStorage:
                 del self.all()[key]
         else:
             pass
+
+    def close(self):
+        """Method close with reload."""
+        self.reload()
