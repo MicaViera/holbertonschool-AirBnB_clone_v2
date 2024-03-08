@@ -51,7 +51,7 @@ def EvenOdd_template(n):
         EvenOdd = "even"
     else:
         EvenOdd = "odd"
-    return render_template('6-number.html', n=n, EvenOdd=EvenOdd)
+    return render_template('6-number_odd_or_even.html', n=n, EvenOdd=EvenOdd)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
